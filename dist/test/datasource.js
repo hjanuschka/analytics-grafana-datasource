@@ -41,6 +41,7 @@ function () {
 
     this.type = instanceSettings.type;
     this.url = instanceSettings.url;
+    this.isAdAnalytics = instanceSettings.jsonData.isAdAnalytics;
     this.name = instanceSettings.name;
     this.q = $q;
     this.backendSrv = backendSrv;
@@ -123,8 +124,14 @@ function () {
 
         data['groupBy'] = target.groupBy;
         data['limit'] = Number(target.limit) || undefined;
+        var apiRequestUrl = _this.url + '/analytics/queries';
+
+        if (_this.isAdAnalytics) {
+          var apiRequestUrl = _this.url + '/analytics/ads/queries';
+        }
+
         return _this.doRequest({
-          url: _this.url + '/analytics/queries/' + target.metric,
+          url: apiRequestUrl + '/' + target.metric,
           data: data,
           method: 'POST',
           resultTarget: target.alias || target.refId,
